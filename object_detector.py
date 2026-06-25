@@ -4,6 +4,7 @@ import cv2
 import cvzone
 import numpy as np
 import os
+import argparse
 from yolo_cam.eigen_cam import EigenCAM
 from yolo_cam.utils.image import show_cam_on_image, scale_cam_image
 import math
@@ -88,7 +89,10 @@ def saliency(rgb_img):
 def predict_for_folder(folder_path, salience=False):
     # Infinite loop to process each frame from the video stream
     for image_name in os.listdir(folder_path):
-        image = cv2.imread(folder_path + image_name)
+        image_path = os.path.join(folder_path, image_name)
+        image = cv2.imread(image_path)
+        if image is None:
+            continue
         image = cv2.resize(image, (640, 640))
         img = image.copy()
         # Perform object detection on the captured frame
@@ -133,10 +137,26 @@ def predict_for_folder(folder_path, salience=False):
 
 model = YOLO('updated_best.pt')
 class_names = ["Intruder", "known_person"]
-path = r"img for human intrusion/test/images/"
 
-# path = r"images-for-testing/"
-# print(model.eval())
 
-predict_for_folder(path)
-# video()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Human intrusion detection")
+    parser.add_argument(
+        "--folder",
+        type=str,
+        default=None,
+        help="Optional folder path for image-based detection",
+    )
+    parser.add_argument(
+        "--salience",
+        action="store_true",
+        help="Show saliency output when using folder mode",
+    )
+    args = parser.parse_args()
+
+    if args.folder:
+        if not os.path.isdir(args.folder):
+            raise FileNotFoundError(f"Folder not found: {args.folder}")
+        predict_for_folder(args.folder, salience=args.salience)
+    else:
+        video()
