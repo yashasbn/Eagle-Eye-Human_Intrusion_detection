@@ -1,4 +1,4 @@
-# Human_Intruder_Detection
+# Eagle-Eye-Human_Intrusion_detection
 
 This project combines **YOLOv8-based object detection** with **FaceNet-based face recognition** to detect human intrusions and identify known individuals (students or faculty). Unknown faces are labeled as **"Intruder"**.  
 
@@ -43,6 +43,10 @@ venv\Scripts\activate      # On Windows
 pip install -r requirements.txt
 ```
 
+### 4. macOS Camera Permission (if using webcam)
+On macOS, grant camera access to your terminal app:  
+**System Settings → Privacy & Security → Camera → enable Terminal / VS Code**
+
 ### 4. Ensure model weights and embeddings are present
 `updated_best.pt` → trained YOLOv8 model weights
 
@@ -56,14 +60,19 @@ pip install -r requirements.txt
 
 ### 1. YOLO Object Detection
 
-Run on a folder of images:
+Run with webcam (default):
 ```bash
 python object_detector.py
 ```
 
-Run with webcam (inside script):
+Run on a folder of images:
 ```bash
-video()
+python object_detector.py --folder "path/to/images/"
+```
+
+Run on a folder with saliency visualization:
+```bash
+python object_detector.py --folder "path/to/images/" --salience
 ```
 
 ### 2. Face Recognition
