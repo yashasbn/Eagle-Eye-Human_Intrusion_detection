@@ -1,3 +1,9 @@
 ultralytics
 cvzone
 facenet-pytorch
+opencv-python
+numpy
+matplotlib
+torch
+torchvision
+ttach
